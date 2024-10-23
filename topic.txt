@@ -1,0 +1,29 @@
+class Topic	// Topic class
+{
+	string name;
+public:
+	Topic(string _name)
+	{
+		this->name = _name;
+	}
+	void edit(string _name)
+	{
+		this->name = _name;
+	}
+	void print()
+	{
+		cout << "Topic : " << name << endl;
+	}
+	string getName()
+	{
+		return name;
+	}
+	void saveData(ofstream& fout)
+	{
+		fout << name << endl;
+	}
+	~Topic()
+	{
+		name = "";
+	}
+};

@@ -1,0 +1,13 @@
+Okay so there are 15 classes Main,User,Admin,Teacher,Program,Course,PLO,CLO,Topics,OBE,Evaluation,Assignment,Quiz,Exam,Questions
+the relationship of classes is given as
+Main class has one to many relation with User
+Teacher and Admin class is generalize in User class
+Admin class has direct association with Program class and Course class 
+Program class has one to many relation with PLO class 
+PLO class has one to many relation with CLO class 
+Topics class has aggregation relation with CLO class 
+PLO and CLO class are generalize in OBE class 
+Exam Assignment Quiz classes are generalized in Evaluation class 
+Question class has many to one relations with Exam Assignment and Quiz classes 
+Question class has direct association with OBE class 
+teacher has association relation with CLO and Evaluation classes 

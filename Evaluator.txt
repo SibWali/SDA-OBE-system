@@ -1,0 +1,163 @@
+class Evaluator
+{
+	Evaluation** evaluations;	// Array of pointers to Evaluation class
+	int totalEvaluations;
+	int size1;
+	Question** questions;	// Array of pointers to Question class
+	int totalQuestions;
+	int size2;
+public:
+	Evaluator()
+	{
+		size1 = 10;
+		totalEvaluations = 0;
+		evaluations = new Evaluation * [size1];	// Creating array of pointers to Evaluation class
+		size2 = 10;
+		totalQuestions = 0;
+		questions = new Question * [size2];	// Creating array of pointers to Question class
+	}
+	void createEvaluation(char type, string _name, int _totalMarks, float _weightage)
+	{
+		Evaluation* _Evaluation = NULL;	// Creating pointer to Evaluation class
+		if (type == 'A')	// If type is 'A'
+			_Evaluation = new Assignment(_name, _totalMarks, _weightage);	// Creating pointer to Assignment class
+		if (type == 'Q')		// If type is 'Q'
+			_Evaluation = new Quiz(_name, _totalMarks, _weightage);	// Creating pointer to Quiz class
+		if (type == 'E')	// If type is 'E'
+			_Evaluation = new Exam(_name, _totalMarks, _weightage);	// Creating pointer to Exam class
+		if (size1 == totalEvaluations)	// If size is equal to total Evaluations
+		{
+			Evaluation** temp = evaluations;	// Creating new array of pointers to Evaluation class
+			size1 += 10;	// Increasing size by 10
+			evaluations = new Evaluation * [size1];	// Creating new array of pointers to Evaluation class
+			for (int i = 0; i < totalEvaluations; i++)
+				evaluations[i] = temp[i];	// Copying data from temp to evaluations
+			delete[] temp;	// Deleting temp
+		}
+		evaluations[totalEvaluations++] = _Evaluation;	// Adding Evaluation to evaluations array
+	}
+	void createQuestion(int _id, string _statement, CLO* _CLO)
+	{
+		Question* _Question = new Question(_id, _statement, _CLO);	// Creating pointer to Question class
+		if (size1 == totalQuestions)	// If size is equal to total Questions
+		{
+			Question** temp = questions;	// Creating new array of pointers to Question class
+			size1 += 10;
+			questions = new Question * [size1];	// Creating new array of pointers to Question class
+			for (int i = 0; i < totalQuestions; i++)
+				questions[i] = temp[i];	// Copying data from temp to questions
+			delete[] temp;		// Deleting temp
+		}
+		questions[totalQuestions++] = _Question;	// Adding Question to questions array
+	}
+	bool checkCLOHasTested(int _id)	// Function to check if CLO has been tested
+	{
+		int totalCount = 0;	// Total count of Questions
+		for (int i = 0; i < totalEvaluations; i++)	// Looping through all Evaluations
+			totalCount += evaluations[i]->countQuestions(_id);	// Adding count of Questions to totalCount
+		if (totalCount > 2)	// If totalCount is greater than 2
+			return true;	// Return true
+		return false;	// Else return false
+	}
+	void printAllQuestions()
+	{
+		for (int i = 0; i < totalQuestions; i++)	// Looping through all Questions
+			questions[i]->print();	// Printing Question
+	}
+	void printAllEvaluations()
+	{
+		for (int i = 0; i < totalEvaluations; i++)		// Looping through all Evaluations
+			evaluations[i]->print();	// Printing Evaluation
+	}
+	void saveQuestions(ofstream& fout)
+	{
+		fout << totalQuestions << endl;	// Saving total Questions
+		for (int i = 0; i < totalQuestions; i++)	// Looping through all Questions
+			questions[i]->saveData(fout);	// Saving Question
+	}
+	void saveEvaluations(ofstream& fout)
+	{
+		fout << totalEvaluations << endl;	// Saving total Evaluations
+		for (int i = 0; i < totalEvaluations; i++)		// Looping through all Evaluations
+			evaluations[i]->saveData(fout);		// Saving Evaluation
+	}
+	Question* findQuestion(int _id)	// Function to find Question
+	{
+		for (int i = 0; i < totalQuestions; i++)	// Looping through all Questions
+		{
+			if (questions[i]->getID() == _id)	// If Question's ID is equal to _id
+				return questions[i];	// Return Question
+		}
+		return NULL;	// Else return NULL
+	}
+	Evaluation* findEvaluation(string _name)	// Function to find Evaluation
+	{
+		for (int i = 0; i < totalEvaluations; i++)	// Looping through all Evaluations
+		{
+			if (evaluations[i]->getName() == _name)	// If Evaluation's name is equal to _name
+				return evaluations[i];	// Return Evaluation
+		}
+		return NULL;	// Else return NULL
+	}
+	void addQuestionToEvaluation(int _id, string _name)
+	{
+		Question* _Question = this->findQuestion(_id);	// Finding Question
+		if (_Question)	// If Question is not NULL
+		{
+			Evaluation* _Evaluation = this->findEvaluation(_name);	// Finding Evaluation
+			if (_Evaluation)
+			{
+				_Evaluation->addQuestion(_Question);	// Adding Question to Evaluation
+			}
+			else
+			{
+				cout << "Evaluation not Found" << endl;	// Else print Evaluation not Found
+			}
+		}
+		else
+		{
+			cout << "Question not Found" << endl;	// Else print Question not Found
+		}
+	}
+	void editQuestion(int _id, string new_Statement)
+	{
+		Question* _Question = findQuestion(_id);	// Finding Question
+		if (_Question)
+		{
+			_Question->edit(new_Statement);	// Editing Question
+		}
+		else
+		{
+			cout << "Question not Found" << endl;	// Else print Question not Found
+		}
+	}
+	void editEvaluation(string name, int new_totalMarks, float new_weightage)
+	{
+		Evaluation* _Evaluation = findEvaluation(name);	// Finding Evaluation
+		if (_Evaluation)
+		{
+			_Evaluation->edit(new_totalMarks, new_weightage);	// Editing Evaluation
+		}
+		else
+		{
+			cout << "Question not Found" << endl;	// Else print Question not Found
+		}
+	}
+	void removeQuestionFromEvaluation(int Question_id, string Evaluation_name)
+	{
+		Evaluation* _Evaluation = this->findEvaluation(Evaluation_name);	// Finding Evaluation
+		if (_Evaluation)
+		{
+			_Evaluation->removeQuestion(Question_id);	// Removing Question from Evaluation
+		}
+		else
+		{
+			cout << "Evaluation not found" << endl;		// Else print Evaluation not found
+		}
+	}
+	~Evaluator()
+	{
+		if (evaluations)	// If evaluations is not NULL
+			delete[] evaluations;	// Delete evaluations
+	}
+};

@@ -1,0 +1,19 @@
+class Evaluation
+{
+protected:
+	int totalMarks;
+	float weightage;
+public:
+	Evaluation(int _totalMarks, float _weightage)
+	{
+		totalMarks = _totalMarks;
+		weightage = _weightage;
+	}
+	virtual int countQuestions(int _id) = 0;	// Pure virtual function
+	virtual void addQuestion(Question* _Question) = 0;	// Pure virtual function
+	virtual string getName() = 0;		// Pure virtual function
+	virtual void removeQuestion(int) = 0;		// Pure virtual function  
+	virtual void saveData(ofstream&) = 0;		// Pure virtual function
+	virtual void edit(int, float) = 0;	// Pure virtual function
+	virtual void print() = 0;		// Pure virtual function
+};

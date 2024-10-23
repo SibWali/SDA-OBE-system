@@ -1,0 +1,80 @@
+class PLO : public OBE		// PLO class
+{
+	CLO** CLOs;		// Array of pointers to CLO class
+	int size;
+	int totalCLOs;
+public:
+	PLO(string _name, int _id) :OBE(_name, _id)
+	{
+		this->size = 10;		// Initial size of array
+		this->CLOs = new CLO * [this->size];	// Dynamically allocating array
+		this->totalCLOs = 0;	// Initially no CLOs
+	}
+	void edit(string _name)
+	{
+		name = _name;
+	}
+	int getID()
+	{
+		return id;
+	}
+	void getAllCLOs(CLO**& list, int& total)	// Get all CLOs
+	{
+		list = this->CLOs;
+		total = this->totalCLOs;
+	}
+	string getName()
+	{
+		return this->name;
+	}
+	void addCLO(CLO* _CLO)		// Add CLO to array
+	{
+		if (size == totalCLOs)
+		{
+			CLO** temp = CLOs;	// Temporary array
+			size += 10;
+			CLOs = new CLO * [size];	// Dynamically allocating new array
+			for (int i = 0; i < totalCLOs; i++)	// Copying elements from temp to CLOs
+				CLOs[i] = temp[i];
+			delete[] temp;	// Deleting temp array
+		}
+		CLOs[totalCLOs++] = _CLO;	// Adding CLO to array
+	}
+	void removeCLO(int _id)
+	{
+		for (int i = 0; i < totalCLOs; i++)	// Searching for CLO
+		{
+			if (CLOs[i]->getID() == _id)	// If CLO found
+			{
+				for (; i < totalCLOs - 1; i++)	// Shifting elements
+				{
+					CLOs[i] = CLOs[i + 1];
+				}
+				totalCLOs--;	// Decreasing totalCLOs
+			}
+		}
+	}
+	void print()
+	{
+		cout << "PLO Name : " << name << "     ID : " << id << endl;
+		cout << "Following CLOs are included in this PLO" << endl;
+		for (int i = 0; i < totalCLOs; i++)	// Printing all CLOs
+			CLOs[i]->print();
+		//cout<<"__________________________________________________"<<endl;
+	}
+	void saveData(ofstream& fout)
+	{
+		fout << name << endl;
+		fout << id << endl;
+		fout << totalCLOs << endl;
+		for (int i = 0; i < totalCLOs; i++)
+		{
+			fout << CLOs[i]->getID() << endl;	// Saving all CLOs
+		}
+	}
+	~PLO()
+	{
+		if (size)		// If size is not 0
+			delete[] CLOs; 		// Delete array
+	}
+};

@@ -1,0 +1,74 @@
+class CLO : public OBE
+{
+	Topic** topics;		// Array of pointers to Topic class
+	int size;
+	int totalTopics;
+public:
+	CLO(string _name, int _id) :OBE(_name, _id)
+	{
+		this->size = 10;		// Initial size of array
+		this->topics = new Topic * [this->size];	// Dynamically allocating array
+		this->totalTopics = 0;	// Initially no topics
+	}
+	void edit(string _name)
+	{
+		name = _name;
+	}
+	void addTopic(Topic* _topic)	// Add topic to array
+	{
+		if (size == totalTopics)
+		{
+			Topic** temp = topics;	// Temporary array
+			size += 10;	// Increasing size of array
+			topics = new Topic * [size];	// Dynamically allocating new array
+			for (int i = 0; i < totalTopics; i++)	// Copying elements from temp to topics
+				topics[i] = temp[i];
+			delete[] temp;	// Deleting temp array
+		}
+		topics[totalTopics++] = _topic;	// Adding topic to array
+	}
+	void removeTopic(string _name)	// Remove topic from array
+	{
+		for (int i = 0; i < totalTopics; i++)	// Searching for topic
+		{
+			if (topics[i]->getName() == _name)	// If topic found
+			{
+				for (; i < totalTopics - 1; i++)	// Shifting elements
+				{
+					topics[i] = topics[i + 1];
+				}
+				totalTopics--;	// Decreasing totalTopics
+			}
+		}
+	}
+	void setId(int _id)	// Set id
+	{
+		id = _id;
+	}
+	int getID()
+	{
+		return id;
+	}
+	void print()
+	{
+		cout << "CLO Name : " << name << "     ID : " << id << endl;
+		for (int i = 0; i < totalTopics; i++)	// Printing all topics
+			topics[i]->print();
+		//cout<<"__________________________________________________"<<endl;
+	}
+	void saveData(ofstream& fout)	// Save data to file
+	{
+		fout << name << endl;
+		fout << id << endl;
+		fout << totalTopics << endl;
+		for (int i = 0; i < totalTopics; i++)	// Saving all topics
+		{
+			fout << topics[i]->getName() << endl;
+		}
+	}
+	~CLO()		// Destructor
+	{
+		if (size)	// If size is not 0
+			delete[] topics;	// Delete array
+	}
+};

@@ -1,0 +1,700 @@
+class AcademicManager
+{
+	Topic** topics;		// Array of pointers to Topic class
+	int totalTopics;
+	int size1;
+	CLO** CLOs;			// Array of pointers to CLO class
+	int totalCLOs;
+	int size2;
+	PLO** PLOs;			// Array of pointers to PLO class
+	int totalPLOs;
+	int size3;
+	Course** courses;		// Array of pointers to Course class
+	int totalCourses;
+	int size4;
+	Program** programs;		// Array of pointers to Program class
+	int totalPrograms;
+	int size5;
+	Evaluator* evaluator;	// Pointer to Evaluator class
+
+public:
+	AcademicManager()
+	{
+		totalTopics = 0;
+		size1 = 10;
+		topics = new Topic * [size1];	// Allocating memory to topics
+		totalCLOs = 0;
+		size2 = 10;
+		CLOs = new CLO * [size2];	// Allocating memory to CLOs
+		totalPLOs = 0;
+		size3 = 10;
+		PLOs = new PLO * [size3];	// Allocating memory to PLOs
+		totalCourses = 0;
+		size4 = 10;
+		courses = new Course * [size4];	// Allocating memory to courses
+		totalPrograms = 0;
+		size5 = 10;
+		programs = new Program * [size5];	// Allocating memory to programs
+		evaluator = new Evaluator();	// Creating Evaluator object
+	}
+	void printAllTopics()
+	{
+		cout << "\nAll Topics\n";
+		for (int i = 0; i < totalTopics; i++)
+			topics[i]->print();		// Printing all Topics
+		cout << "__________________________________________" << endl;
+	}
+	void printAllCLOs()
+	{
+		cout << "\nAll CLOs\n";
+		for (int i = 0; i < totalCLOs; i++)
+			CLOs[i]->print();	// Printing all CLOs
+		cout << "__________________________________________" << endl;
+	}
+	void printAllPLOs()
+	{
+		cout << "\nAll PLOs\n";
+		for (int i = 0; i < totalPLOs; i++)
+			PLOs[i]->print();		// Printing all PLOs
+		cout << "__________________________________________" << endl;
+	}
+	void printAllCourses()
+	{
+		cout << "\nAll Courses\n";
+		for (int i = 0; i < totalCourses; i++)
+			courses[i]->print();		// Printing all Courses
+		cout << "__________________________________________" << endl;
+	}
+	void printAllPrograms()
+	{
+		cout << "\nAll Programs\n";
+		for (int i = 0; i < totalPrograms; i++)
+			programs[i]->print();		// Printing all Programs
+		//cout<<"__________________________________________"<<endl;
+	}
+	void printAllQuestions()
+	{
+		evaluator->printAllQuestions();		// Printing all Questions
+	}
+	void printAllEvaluations()
+	{
+		evaluator->printAllEvaluations();	// Printing all Evaluations
+	}
+	void createTopic(string _name)	// Creating Topic
+	{
+		Topic* _topic = new Topic(_name);	// Creating Topic object
+		if (size1 == totalTopics)
+		{
+			Topic** temp = topics;	// Creating temp array
+			size1 += 10;
+			topics = new Topic * [size1];	// Allocating memory to topics
+			for (int i = 0; i < totalTopics; i++)
+				topics[i] = temp[i];	// Copying temp to topics
+			delete[] temp;		// Deleting temp
+		}
+		topics[totalTopics++] = _topic;	// Adding Topic to topics
+	}
+	void createCLO(string _name, int _id)	// Creating CLO
+	{
+		CLO* _CLO = new CLO(_name, _id);		// Creating CLO object
+		if (size2 == totalCLOs)
+		{
+			CLO** temp = CLOs;	// Creating temp array
+			size2 += 10;
+			CLOs = new CLO * [size2];	// Allocating memory to CLOs
+			for (int i = 0; i < totalCLOs; i++)
+				CLOs[i] = temp[i];	// Copying temp to CLOs
+			delete[] temp;		// Deleting temp
+		}
+		CLOs[totalCLOs++] = _CLO;		// Adding CLO to CLOs
+	}
+	void createPLO(string _name, int _id)	// Creating PLO
+	{
+		PLO* _PLO = new PLO(_name, _id);	// Creating PLO object
+		if (size3 == totalCLOs)
+		{
+			PLO** temp = PLOs;	// Creating temp array
+			size3 += 10;
+			PLOs = new PLO * [size3];	// Allocating memory to PLOs
+			for (int i = 0; i < totalPLOs; i++)
+				PLOs[i] = temp[i];	// Copying temp to PLOs
+			delete[] temp;		// Deleting temp
+		}
+		PLOs[totalPLOs++] = _PLO;		// Adding PLO to PLOs
+	}
+	void createCourse(string _name, int _id, string _courseCode, float _creditHours)	// Creating Course
+	{
+		Course* _Course = new Course(_name, _id, _creditHours, _courseCode);	// Creating Course object
+		if (size4 == totalCourses)
+		{
+			Course** temp = courses;		// Creating temp array
+			size4 += 10;
+			courses = new Course * [size4];	// Allocating memory to courses
+			for (int i = 0; i < totalCourses; i++)
+				courses[i] = temp[i];		// Copying temp to courses
+			delete[] temp;		// Deleting temp
+		}
+		courses[totalCourses++] = _Course;	// Adding Course to courses
+	}
+	void createProgram(string _name, int _duration, int _totalCreditHours)	// Creating Program
+	{
+		Program* _Program = new Program(_name, _duration, _totalCreditHours);	// Creating Program object
+		if (size5 == totalPrograms)
+		{
+			Program** temp = programs;	// Creating temp array
+			size5 += 10;
+			programs = new Program * [size5];	// Allocating memory to programs
+			for (int i = 0; i < totalPrograms; i++)
+				programs[i] = temp[i];	// Copying temp to programs
+			delete[] temp;		// Deleting temp
+		}
+		programs[totalPrograms++] = _Program;		// Adding Program to programs
+	}
+	void createQuestion(int _id, string _statement, int CLO_id)	// Creating Question
+	{
+		CLO* _CLO = this->findCLO(CLO_id);		// Finding CLO
+		if (!_CLO)	// If CLO not found
+			cout << "CLO not found" << endl;	// Print CLO not found
+		evaluator->createQuestion(_id, _statement, _CLO);	// Creating Question
+	}
+	void createEvaluation(char _type, string _name, int _totalMarks, float _weightage)	// Creating Evaluation
+	{
+		evaluator->createEvaluation(_type, _name, _totalMarks, _weightage);
+	}
+	Topic* findTopic(string _name)	// Finding Topic
+	{
+		for (int i = 0; i < totalTopics; i++)
+		{
+			if (topics[i]->getName() == _name)	// If Topic found
+				return topics[i];	// Return Topic
+		}
+		return NULL;	// Return NULL
+	}
+	CLO* findCLO(int _id)		// Finding CLO
+	{
+		for (int i = 0; i < totalCLOs; i++)
+		{
+			if (CLOs[i]->getID() == _id)	// If CLO found
+				return CLOs[i];		// Return CLO
+		}
+		return NULL;	// Return NULL
+	}
+	PLO* findPLO(int _id)	// Finding PLO
+	{
+		for (int i = 0; i < totalPLOs; i++)
+		{
+			if (PLOs[i]->getID() == _id)	// If PLO found
+				return PLOs[i];		// Return PLO
+		}
+		return NULL;	// Return NULL
+	}
+	Course* findCourse(int _id)		// Finding Course
+	{
+		for (int i = 0; i < totalCourses; i++)
+		{
+			if (courses[i]->getID() == _id)	// If Course found
+				return courses[i];	// Return Course
+		}
+		return NULL;	// Return NULL
+	}
+	Program* findProgram(string _name)	// Finding Program
+	{
+		for (int i = 0; i < totalPrograms; i++)
+		{
+			if (programs[i]->getName() == _name)	// If Program found
+				return programs[i];	// Return Program
+		}
+		return NULL;	// Return NULL
+	}
+	void addTopicToCLO(string topicName, int _id)	// Adding Topic to CLO
+	{
+		Topic* _topic = this->findTopic(topicName);	// Finding Topic
+		if (_topic)
+		{
+			CLO* _CLO = this->findCLO(_id);	// Finding CLO
+			if (_CLO)
+			{
+				_CLO->addTopic(_topic);	// Adding Topic to CLO
+			}
+			else
+			{
+				cout << "CLO not Found" << endl;	// Print CLO not found
+			}
+		}
+		else
+		{
+			cout << "Topic not Found" << endl;	// Print Topic not found
+		}
+	}
+	void addCLOToPLO(int CLO_id, int PLO_id)
+	{
+		CLO* _CLO = this->findCLO(CLO_id);	// Finding CLO
+		if (_CLO)
+		{
+			PLO* _PLO = this->findPLO(PLO_id);	// Finding PLO
+			if (_PLO)
+			{
+				_PLO->addCLO(_CLO);	// Adding CLO to PLO
+			}
+			else
+			{
+				cout << "PLO not Found" << endl;	// Print PLO not found
+			}
+		}
+		else
+		{
+			cout << "CLO not Found" << endl;	// Print CLO not found
+		}
+	}
+	void addCLOToCourse(int CLO_id, int Course_id)	// Adding CLO to Course
+	{
+		CLO* _CLO = this->findCLO(CLO_id);	// Finding CLO
+		if (_CLO)
+		{
+			Course* _Course = this->findCourse(Course_id);	// Finding Course
+			if (_Course)
+			{
+				_Course->addCLO(_CLO);	// Adding CLO to Course
+			}
+			else
+			{
+				cout << "Course not Found" << endl;	// Print Course not found
+			}
+		}
+		else
+		{
+			cout << "CLO not Found" << endl;	// Print CLO not found
+		}
+	}
+	void addCourseToProgram(int Course_id, string name)	// Adding Course to Program
+	{
+		Course* _Course = this->findCourse(Course_id);	// Finding Course
+		if (_Course)
+		{
+			Program* _Program = this->findProgram(name);	// Finding Program
+			if (_Program)
+			{
+				_Program->addCourse(_Course);	// Adding Course to Program
+			}
+			else
+			{
+				cout << "Program not Found" << endl;	// Print Program not found
+			}
+		}
+		else
+		{
+			cout << "Course not Found" << endl;		// Print Course not found
+		}
+	}
+	void addPLOToProgram(int PLO_id, string name)	// Adding PLO to Program
+	{
+		PLO* _PLO = this->findPLO(PLO_id);	// Finding PLO
+		if (_PLO)
+		{
+			Program* _Program = this->findProgram(name);	// Finding Program
+			if (_Program)
+			{
+				_Program->addPLO(_PLO);		// Adding PLO to Program
+			}
+			else
+			{
+				cout << "Program not Found" << endl;	// Print Program not found
+			}
+		}
+		else
+		{
+			cout << "PLO not Found" << endl;		// Print PLO not found
+		}
+	}
+	void addQuestionToEvaluation(int Question_id, string _name)	// Adding Question to Evaluation
+	{
+		evaluator->addQuestionToEvaluation(Question_id, _name);
+	}
+	void editTopic(string old_name, string new_name)	// Editing Topic
+	{
+		Topic* _topic = findTopic(old_name);	// Finding Topic
+		if (_topic)
+		{
+			_topic->edit(new_name);	// Editing Topic
+		}
+		else
+		{
+			cout << "Topic not Found" << endl;	// Print Topic not found
+		}
+	}
+	void editCLO(int _id, string new_name)	// Editing CLO
+	{
+		CLO* _CLO = findCLO(_id);	// Finding CLO
+		if (_CLO)
+		{
+			_CLO->edit(new_name);	// Editing CLO
+		}
+		else
+		{
+			cout << "CLO not Found" << endl;	// Print CLO not found
+		}
+	}
+	void editPLO(int _id, string new_name)	// Editing PLO
+	{
+		PLO* _PLO = findPLO(_id);	// Finding PLO
+		if (_PLO)
+		{
+			_PLO->edit(new_name);	// Editing PLO
+		}
+		else
+		{
+			cout << "PLO not Found" << endl;	// Print PLO not found
+		}
+	}
+	void editCourse(int _id, string new_name, string new_courseCode, float new_creditHours)	// Editing Course
+	{
+		Course* _Course = findCourse(_id);	// Finding Course
+		if (_Course)
+		{
+			_Course->edit(new_name, new_creditHours, new_courseCode);	// Editing Course
+		}
+		else
+		{
+			cout << "Course not Found" << endl;		// Print Course not found
+		}
+	}
+	void editProgram(string old_name, string new_name, int new_duration, int new_totalCreditHours)	// Editing Program
+	{
+		Program* _Program = findProgram(old_name);	// Finding Program
+		if (_Program)
+		{
+			_Program->edit(new_name, new_duration, new_totalCreditHours);	// Editing Program
+		}
+		else
+		{
+			cout << "Program not Found" << endl;	// Print Program not found
+		}
+	}
+	void editQuestion(int _id, string new_Statement)	// Editing Question
+	{
+		evaluator->editQuestion(_id, new_Statement);
+	}
+	void editEvaluation(string name, int new_totalMarks, float new_weightage) // Editing Evaluation
+	{
+		evaluator->editEvaluation(name, new_totalMarks, new_weightage);
+	}
+	void removeTopicFromCLO(int _id, string _name)	// Removing Topic from CLO
+	{
+		CLO* _CLO = this->findCLO(_id);	// Finding CLO
+		if (_CLO)
+		{
+			_CLO->removeTopic(_name);	// Removing Topic from CLO
+		}
+		else
+		{
+			cout << "CLO not found" << endl;	// Print CLO not found
+		}
+	}
+	void removeCLOFromPLO(int CLO_id, int PLO_id)	// Removing CLO from PLO
+	{
+		PLO* _PLO = this->findPLO(PLO_id);	// Finding PLO
+		if (_PLO)
+		{
+			_PLO->removeCLO(CLO_id);	// Removing CLO from PLO
+		}
+		else
+		{
+			cout << "PLO not found" << endl;	// Print PLO not found
+		}
+	}
+	void removeCLOFromCourse(int Course_id, int CLO_id)	// Removing CLO from Course
+	{
+		Course* _Course = this->findCourse(Course_id);	// Finding Course
+		if (_Course)
+		{
+			_Course->removeCLO(CLO_id);	// Removing CLO from Course
+		}
+		else
+		{
+			cout << "Course not found" << endl;	// Print Course not found
+		}
+	}
+	void removePLOFromProgram(string _name, int PLO_id)	// Removing PLO from Program
+	{
+		Program* _Program = this->findProgram(_name);	// Finding Program
+		if (_Program)
+		{
+			_Program->removePLO(PLO_id);	// Removing PLO from Program
+		}
+		else
+		{
+			cout << "Program not found" << endl;	// Print Program not found
+		}
+	}
+	void removeCourseFromProgram(string _name, int Course_id)	// Removing Course from Program
+	{
+		Program* _Program = this->findProgram(_name);		// Finding Program
+		if (_Program)
+		{
+			_Program->removeCourse(Course_id);		// Removing Course from Program
+		}
+		else
+		{
+			cout << "Program not found" << endl;	// Print Program not found
+		}
+	}
+	void removeQuestionFromEvaluation(int Question_id, string Evaluation_name)
+	{
+		evaluator->removeQuestionFromEvaluation(Question_id, Evaluation_name);	// Removing Question from Evaluation
+	}
+	void listOfRelevantCourses(string _name, int PLO_id)	// List of Relevant Courses
+	{
+		PLO* _PLO = this->findPLO(PLO_id);	// Finding PLO
+		if (_PLO)
+		{
+			Program* _Program = this->findProgram(_name);	// Finding Program
+			if (_Program)
+			{
+				_Program->getCoursesByPLO(_PLO);	// Getting Courses by PLO
+			}
+			else
+			{
+				cout << "Program not Found" << endl;	// Print Program not found
+			}
+		}
+		else
+		{
+			cout << "PLO not Found" << endl;	// Print PLO not found
+		}
+	}
+	bool allCLOsTested(int Course_id)	// All CLOs Tested
+	{
+		bool check = true;	// Check
+		Course* _Course = this->findCourse(Course_id);	// Finding Course
+		CLO** _CLOs;	// CLOs array pointer 
+		int total;
+		_Course->getAllCLOs(_CLOs, total);	// Getting all CLOs
+		for (int i = 0; i < total && check; i++)	// Looping through all CLOs
+			if (!evaluator->checkCLOHasTested(_CLOs[i]->getID()))	// Checking if CLO has been tested
+				check = false;	// If not, check is false
+		return check;	// Return check
+	}
+	void saveData()	// Saving Data
+	{
+		char option;	// Option to save data
+		cout << "Save Data? (y/n) : ";
+		cin >> option;	// Getting option
+		if (option == 'y')
+		{
+			ofstream fout;	// File output stream
+			fout.open("topics.txt");	// Opening topics file
+			fout << totalTopics << endl;	// Writing total topics
+			for (int i = 0; i < totalTopics; i++)	// Looping through all topics
+				topics[i]->saveData(fout);	// Saving topic data
+			fout.close();	// Closing topics file
+			fout.open("CLOs.txt");	// Opening CLOs file
+			fout << totalCLOs << endl;	// Writing total CLOs
+			for (int i = 0; i < totalCLOs; i++)	// Looping through all CLOs
+				CLOs[i]->saveData(fout);	// Saving CLO data
+			fout.close();	// Closing CLOs file
+			fout.open("PLOs.txt");	// Opening PLOs file
+			fout << totalPLOs << endl;	// Writing total PLOs
+			for (int i = 0; i < totalPLOs; i++)	// Looping through all PLOs
+				PLOs[i]->saveData(fout);	// Saving PLO data
+			fout.close();	// Closing PLOs file
+			fout.open("Courses.txt");	// Opening Courses file
+			fout << totalCourses << endl;	// Writing total Courses
+			for (int i = 0; i < totalCourses; i++)	// Looping through all Courses
+				courses[i]->saveData(fout);	// Saving Course data
+			fout.close();	// Closing Courses file
+			fout.open("Programs.txt");	// Opening Programs file
+			fout << totalPrograms << endl;	// Writing total Programs
+			for (int i = 0; i < totalPrograms; i++)	// Looping through all Programs
+				programs[i]->saveData(fout);	// Saving Program data
+			fout.close();	// Closing Programs file
+			fout.open("Questions.txt");	// Opening Questions file
+			evaluator->saveQuestions(fout);	// Saving Questions
+			fout.close();	// Closing Questions file
+			fout.open("Evaluations.txt");	// Opening Evaluations file
+			evaluator->saveEvaluations(fout);	// Saving Evaluations
+			fout.close();	// Closing Evaluations file
+
+		}
+		else
+		{
+			cout << "***Data not Saved***" << endl;
+		}
+	}
+	void readData()	// Reading Data
+	{
+		ifstream fin;	// File input stream
+		fin.open("topics.txt");	// Opening topics file
+		if (fin)	// 
+		{
+			string _name;	// Topic name
+			int total;
+			fin >> total;	// Reading total topics
+			for (int i = 0; i < total; i++)
+			{
+				fin >> _name;	// Reading topic name
+				this->createTopic(_name);	// Creating topic
+			}
+		}
+		fin.close();	// Closing topics file
+
+		fin.open("CLOs.txt");	// Opening CLOs file
+		if (fin)
+		{
+			int total;
+			string _name;	// CLO name
+			int _id;	// CLO id
+			int count;	// Count
+			fin >> total;	// Reading total CLOs
+			for (int i = 0; i < total; i++)
+			{
+				fin >> _name >> _id;	// Reading CLO name and id
+				this->createCLO(_name, _id);	// Creating CLO
+				fin >> count;	// Reading count
+				for (int j = 0; j < count; j++)
+				{
+					fin >> _name;	// Reading topic name
+					addTopicToCLO(_name, _id);	// Adding topic to CLO
+				}
+			}
+		}
+		fin.close();	// Closing CLOs file
+
+
+		fin.open("PLOs.txt");	// Opening PLOs file
+		if (fin)
+		{
+			int total;
+			string _name;	// PLO name
+			int _id;	// PLO id
+			int count;	// Count
+			fin >> total;		// Reading total PLOs
+			for (int i = 0; i < total; i++)
+			{
+				fin >> _name >> _id;	// Reading PLO name and id
+				this->createPLO(_name, _id);	// Creating PLO
+				fin >> count;		// Reading count
+				int CLO_id;	// CLO id
+				for (int j = 0; j < count; j++)
+				{
+					fin >> CLO_id;	// Reading CLO id
+					addCLOToPLO(CLO_id, _id);	// Adding CLO to PLO
+				}
+			}
+		}
+		fin.close();	// Closing PLOs file
+
+
+		fin.open("Courses.txt");	// Opening Courses file
+		if (fin)
+		{
+			int total;		// Total Courses
+			string _name;	// Course name
+			int _id;
+			float creditHour;	// Credit hour
+			string courseCode;	// Course code
+			int count;
+			fin >> total;		// Reading total Courses
+			for (int i = 0; i < total; i++)
+			{
+				fin >> _name >> _id >> courseCode >> creditHour;	// Reading Course name, id, course code and credit hour
+				this->createCourse(_name, _id, courseCode, creditHour);	// Creating Course
+				fin >> count;	// Reading count
+				int CLO_id;	// CLO id
+				for (int j = 0; j < count; j++)
+				{
+					fin >> CLO_id;	// Reading CLO id
+					addCLOToCourse(CLO_id, _id);		// Adding CLO to Course
+				}
+			}
+		}
+		fin.close();	// Closing Courses file
+
+
+		fin.open("Programs.txt");	// Opening Programs file
+		if (fin)
+		{
+			int total;
+			string _name;	// Program name
+			int totalCreditHour;	// Total credit hour
+			int duration;	// Duration
+			int count;	// Count
+			fin >> total;	// Reading total Programs
+			for (int i = 0; i < total; i++)
+			{
+				fin >> _name >> totalCreditHour >> duration;	// Reading Program name, total credit hour and duration
+				this->createProgram(_name, duration, totalCreditHour);	// Creating Program
+				fin >> count;	// Reading count
+				int Course_id;	// Course id
+				for (int j = 0; j < count; j++)
+				{
+					fin >> Course_id;	// Reading Course id
+					addCourseToProgram(Course_id, _name);	// Adding Course to Program
+				}
+				fin >> count;	// Reading count
+				int PLO_id;	// PLO id
+				for (int j = 0; j < count; j++)
+				{
+					fin >> PLO_id;	// Reading PLO id
+					addPLOToProgram(PLO_id, _name);	// Adding PLO to Program
+				}
+			}
+		}
+		fin.close();	// Closing Programs file
+
+
+		fin.open("Questions.txt");	// Opening Questions file
+		if (fin)
+		{
+			int total;
+			string _name;	// Question name
+			int Question_id, CLO_id;	// Question id and CLO id
+			fin >> total;	// Reading total Questions
+			for (int i = 0; i < total; i++)
+			{
+				fin >> Question_id >> _name >> CLO_id;	// Reading Question id, name and CLO id
+				this->createQuestion(Question_id, _name, CLO_id);	// Creating Question
+			}
+		}
+		fin.close();	// Closing Questions file
+
+
+		fin.open("Evaluations.txt");	// Opening Evaluations file
+		if (fin)
+		{
+			int total;
+			string _name;	// Evaluation name
+			char type;		// Evaluation type
+			int totalMarks;	// Total marks
+			float weightage;	// Weightage
+			int count, _id;	// Count and id
+			fin >> total;	// Reading total Evaluations
+			for (int i = 0; i < total; i++)
+			{
+				fin >> _name >> type >> totalMarks >> weightage;	// Reading Evaluation name, type, total marks and weightage
+				this->createEvaluation(type, _name, totalMarks, weightage);	// Creating Evaluation
+				fin >> count;		// Reading count
+				for (int j = 0; j < count; j++)
+				{
+					fin >> _id;		// Reading id
+					addQuestionToEvaluation(_id, _name);		// Adding Question to Evaluation
+				}
+			}
+		}
+		fin.close();	// Closing Evaluations file
+	}
+	~AcademicManager()	// Destructor
+	{
+		if (size1)
+			delete[] topics;	// Deleting topics
+		if (size2)
+			delete[] CLOs;		// Deleting CLOs
+		if (size3)
+			delete[] PLOs;		// Deleting PLOs
+		if (size4)
+			delete[] courses;	// Deleting courses
+		if (size5)
+			delete[] programs;		// Deleting programs
+		if (evaluator)
+			delete evaluator;		// Deleting evaluator
+	}
+};	

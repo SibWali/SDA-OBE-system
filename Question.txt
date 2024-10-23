@@ -1,0 +1,37 @@
+class Question
+{
+	int id;
+	string statement;
+	CLO* clo;		// Pointer to CLO class
+public:
+	Question(int _id, string _statement, CLO* _clo)	// Constructor
+	{
+		this->id = _id;
+		this->statement = _statement;
+		this->clo = _clo;
+	}
+	CLO* getCLO()
+	{
+		return clo;		// Returning CLO
+	}
+	int getID()
+	{
+		return id;
+	}
+	void edit(string new_statement)
+	{
+		this->statement = new_statement;
+	}
+	void print()
+	{
+		cout << "Question ID: " << id << " Statement: " << statement << " CLO: " << clo->getID() << endl;	// Printing Question
+	}
+	void saveData(ofstream& fout)
+	{
+		fout << id << endl << statement << endl << clo->getID() << endl;	// Saving Question data
+	}
+	~Question()
+	{
+		clo = NULL;	// Setting clo to NULL
+	}
+};

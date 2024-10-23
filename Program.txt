@@ -1,0 +1,140 @@
+class Program
+{
+	Course** courses;	// Array of pointers to Course class
+	int totalCourses;
+	int size1;
+	PLO** PLOs;		// Array of pointers to PLO class
+	int totalPLOs;
+	int size2;
+	string name;
+	int duration;
+	int totalCreditHours;
+public:
+	string getName()
+	{
+		return name;
+	}
+	Program(string _name, int _duration, int _totalCreditHours)
+	{
+		this->name = _name;
+		this->duration = _duration;
+		this->totalCreditHours = _totalCreditHours;
+		this->totalCourses = 0;
+		this->totalPLOs = 0;
+		this->size1 = 10;
+		this->size2 = 10;
+		this->courses = new Course * [size1];	// Dynamically allocating array
+		this->PLOs = new PLO * [size2];		// Dynamically allocating array
+	}
+	void edit(string _name, int _duration, int _totalCreditHours)
+	{
+		this->name = _name;
+		this->duration = _duration;
+		this->totalCreditHours = _totalCreditHours;
+	}
+	void addPLO(PLO* _PLO)	// Add PLO
+	{
+		if (size2 == totalPLOs)	// If array is full
+		{
+			PLO** temp = PLOs;	// Temporary array
+			size2 += 10;		// Increasing size
+			PLOs = new PLO * [size2];	// Dynamically allocating new array
+			for (int i = 0; i < totalPLOs; i++)	// Copying elements from temp to PLOs
+				PLOs[i] = temp[i];
+			delete[] temp;		// Deleting temp array
+		}
+		PLOs[totalPLOs++] = _PLO;	// Adding PLO to array
+	}
+	void addCourse(Course* _Course)
+	{
+		if (size1 == totalCourses)
+		{
+			Course** temp = courses;		// Temporary array
+			size1 += 10;	// Increasing size
+			courses = new Course * [size1];	// Dynamically allocating new array
+			for (int i = 0; i < totalCourses; i++)		// Copying elements from temp to courses
+				courses[i] = temp[i];
+			delete[] temp;		// Deleting temp array
+		}
+		courses[totalCourses++] = _Course;	// Adding Course to array
+	}
+	void removePLO(int _id)
+	{
+		for (int i = 0; i < totalPLOs; i++)	// Searching for PLO
+		{
+			if (PLOs[i]->getID() == _id)	// If found
+			{
+				for (; i < totalPLOs - 1; i++)
+				{
+					PLOs[i] = PLOs[i + 1];	// Shifting elements
+				}
+				totalPLOs--;	// Decreasing totalPLOs
+			}
+		}
+	}
+	void removeCourse(int _id)
+	{
+		for (int i = 0; i < totalCourses; i++)		// Searching for Course
+		{
+			if (courses[i]->getID() == _id)	// If found
+			{
+				for (; i < totalCourses - 1; i++)
+				{
+					courses[i] = courses[i + 1];	// Shifting elements
+				}
+				totalCourses--;		// Decreasing totalCourses
+			}
+		}
+	}
+	void getCoursesByPLO(PLO* _plo)		// Get Courses by PLO
+	{
+		cout << "Following Courses are relevent to the PLO : " << _plo->getName() << endl;
+		CLO** list;		// Array of pointers to CLO class
+		int count;
+		_plo->getAllCLOs(list, count);	// Getting all CLOs of PLO
+		for (int i = 0; i < totalCourses; i++)
+		{
+			if (courses[i]->findCLOs(list, count)) // If CLOs of PLO are found in Course
+				courses[i]->print();	// Print Course
+		}
+		cout << "******************************************" << endl;
+	}
+	void print()
+	{
+		//cout<<"______Program Details______\n";
+		cout << "Program : " << this->name << endl;
+		cout << "Duration : " << duration << " years        Total Credit Hours : " << totalCreditHours << endl;
+		cout << "Courses : " << endl;
+		for (int i = 0; i < totalCourses; i++)
+			courses[i]->print();		// Printing all Courses
+		//cout<<endl;
+		cout << "PLOs : " << endl;
+		for (int i = 0; i < totalPLOs; i++)	// Printing all PLOs
+			PLOs[i]->print();
+		//cout<<"\n_________________________________\n\n";
+		//cout<<"__________________________________________________"<<endl;
+	}
+	void saveData(ofstream& fout)
+	{
+		fout << name << endl;
+		fout << totalCreditHours << endl;
+		fout << duration << endl;
+		fout << totalCourses << endl;
+		for (int i = 0; i < totalCourses; i++)
+		{
+			fout << courses[i]->getID() << endl;	// Saving Course ID
+		}
+		fout << totalPLOs << endl;		// Saving total PLOs
+		for (int i = 0; i < totalPLOs; i++)
+		{
+			fout << PLOs[i]->getID() << endl;	// Saving PLO ID
+		}
+	}
+	~Program()
+	{
+		if (size1)		// If size1 is not 0
+			delete[] courses;	// Deleting courses array
+		if (size2)		// If size2 is not 0
+			delete[] PLOs;		// Deleting PLOs array
+	}
+};

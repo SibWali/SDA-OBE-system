@@ -1,0 +1,87 @@
+class Exam : public Evaluation
+{
+	string name;
+	char type;
+	Question** ques;	// Array of pointers to Question class
+	int totalQues;
+	int size;
+public:
+	Exam(string _name, int _totalMarks, float _weightage) :Evaluation(_totalMarks, _weightage)
+	{
+		this->name = _name;
+		this->type = 'E';		// Setting type to 'E'
+		this->size = 10;
+		this->ques = new Question * [this->size];		// Creating array of pointers to Question class
+		this->totalQues = 0;		// Setting total Questions to 0
+	}
+	string getName()
+	{
+		return name;
+	}
+	void print()
+	{
+		cout << "Name: " << name << endl << "Total Marks: " << totalMarks << " Weightage: " << weightage << endl;	// Printing Exam data
+		for (int i = 0; i < totalQues; i++)
+		{
+			ques[i]->print();		// Printing Question
+		}
+	}
+	void edit(int new_totalmarks, float new_weightage)
+	{
+		totalMarks = new_totalmarks;
+		weightage = new_weightage;
+	}
+	void saveData(ofstream& fout)
+	{
+		fout << name << endl << type << endl << totalMarks << endl << weightage << endl;	// Saving Exam data
+		fout << totalQues << endl;
+		for (int i = 0; i < totalQues; i++)
+		{
+			fout << ques[i]->getID() << endl;	// Saving Question ID
+		}
+	}
+	void addQuestion(Question* _Question)
+	{
+		if (size == totalQues)
+		{
+			Question** temp = ques;	// Creating new array of pointers to Question class
+			size += 10;	// Increasing size by 10
+			ques = new Question * [size];	// Creating new array of pointers to Question class
+			for (int i = 0; i < totalQues; i++)
+				ques[i] = temp[i];	// Copying data from temp to ques
+			delete[] temp;		// Deleting temp
+		}
+		ques[totalQues++] = _Question;	// Adding Question to ques array
+	}
+	int countQuestions(int _id)
+	{
+		int count = 0;
+		for (int i = 0; i < totalQues; i++)
+		{
+			if (ques[i]->getCLO()->getID() == _id)	// If Question's CLO ID is equal to _id
+			{
+				count++;	// Incrementing count
+			}
+		}
+		return count;	// Returning count
+	}
+	void removeQuestion(int _id)
+	{
+		for (int i = 0; i < totalQues; i++)		// Searching for Question
+		{
+			if (ques[i]->getID() == _id)
+			{
+				for (; i < totalQues - 1; i++)
+				{
+					ques[i] = ques[i + 1];	// Removing Question
+				}
+				totalQues--;	// Decrementing total Questions
+			}
+		}
+	}
+	~Exam()
+	{
+		if (size)	// If size is not 0
+			delete[] ques;	// Deleting ques array
+	}
+};

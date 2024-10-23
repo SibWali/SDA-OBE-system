@@ -1,0 +1,16 @@
+class OBE
+{
+protected:
+	int id;
+	string name;
+public:
+	OBE(string _name, int _id)
+	{
+		this->id = _id;
+		this->name = _name;
+	}
+	virtual void print() = 0;			// Pure virtual function
+	virtual void saveData(ofstream&) = 0;  		// Pure virtual function
+	virtual void edit(string) = 0;		// Pure virtual function
+	~OBE() {}		// Destructor
+};
